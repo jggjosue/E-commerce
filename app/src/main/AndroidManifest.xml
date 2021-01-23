@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ECommerce">
         <activity
-            android:name=".MainActivity"
+            android:name=".v1.ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.ECommerce.NoActionBar">
             <intent-filter>
