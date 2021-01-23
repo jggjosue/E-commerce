@@ -3,10 +3,13 @@ package com.app.ecommerce.v1.ui;
 import android.os.Bundle;
 import com.app.ecommerce.R;
 import com.app.ecommerce.v1.entities.Product;
+import com.app.ecommerce.v1.gateways.SyncAdapter;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import java.util.ArrayList;
@@ -27,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
 
 //        Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(""), THUMBSIZE, THUMBSIZE);
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new SyncAdapter(MainActivity.this, true);
+            }
+        });
+
         seeker = findViewById(R.id.seeker);
         seeker.addTextChangedListener(new TextWatcher() {
             @Override
@@ -44,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                 filter(s.toString());
             }
         });
-
         list = findViewById(R.id.list);
         list.setLayoutManager(new GridLayoutManager(this, 1));
         listProduct = new ArrayList<>();
@@ -57,9 +66,18 @@ public class MainActivity extends AppCompatActivity {
         list.setAdapter(adapterProduct);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
     public void filter(String texto) {
         ArrayList<Product> filtrarLista = new ArrayList<>();
-
         for(Product product : listProduct) {
             if(product.getTitle().toLowerCase().contains(texto.toLowerCase()))
                 filtrarLista.add(product);
