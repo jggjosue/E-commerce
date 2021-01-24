@@ -39,6 +39,7 @@ dependencies {
     api 'androidx.recyclerview:recyclerview:1.1.0'
     api 'com.mcxiaoke.volley:library:1.0.19'
     api 'com.google.code.gson:gson:2.8.5'
+    api 'com.github.bumptech.glide:glide:4.11.0'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

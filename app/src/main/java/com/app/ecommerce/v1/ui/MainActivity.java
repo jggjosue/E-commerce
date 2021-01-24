@@ -2,34 +2,30 @@ package com.app.ecommerce.v1.ui;
 
 import android.os.Bundle;
 import com.app.ecommerce.R;
+import com.app.ecommerce.v1.entities.ListProduct;
 import com.app.ecommerce.v1.entities.Product;
 import com.app.ecommerce.v1.gateways.SyncAdapter;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppCompatEditText seeker;
     private RecyclerView list;
+    private AppCompatEditText seeker;
     private AdapterProduct adapterProduct;
-    private List<Product> listProduct;
-    private final int THUMBSIZE = 64;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(""), THUMBSIZE, THUMBSIZE);
-
+        ListProduct.INSTANCE().init();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -55,20 +51,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         list = findViewById(R.id.list);
-        list.setLayoutManager(new GridLayoutManager(this, 1));
-        listProduct = new ArrayList<>();
-        listProduct.add(new Product("English", "12.50", R.drawable.ic_launcher_background));
-        listProduct.add(new Product("English", "125.30", R.drawable.ic_launcher_background));
-        listProduct.add(new Product("English", "90.00", R.drawable.ic_launcher_background));
-        listProduct.add(new Product("English", "123", R.drawable.ic_launcher_background));
-        listProduct.add(new Product("English", "434.90", R.drawable.ic_launcher_background));
-        adapterProduct = new AdapterProduct(this, listProduct);
+        list.setLayoutManager(new GridLayoutManager(this, 2));
+        adapterProduct = new AdapterProduct(this, ListProduct.INSTANCE().getListProduct());
         list.setAdapter(adapterProduct);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+        seeker.setFocusable(true);
+        seeker.setFocusableInTouchMode(true);
+        seeker.requestFocus();
     }
 
     @Override
@@ -76,13 +64,18 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    public void filter(String texto) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void filter(String text) {
         ArrayList<Product> filtrarLista = new ArrayList<>();
-        for(Product product : listProduct) {
-            if(product.getTitle().toLowerCase().contains(texto.toLowerCase()))
+        for(Product product : ListProduct.INSTANCE().getListProduct()) {
+            if(product.getTitle().toLowerCase().contains(text.toLowerCase()))
                 filtrarLista.add(product);
         }
-        adapterProduct.filtrar(filtrarLista);
+        adapterProduct.filter(filtrarLista);
     }
 
 }

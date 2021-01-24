@@ -15,6 +15,8 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.app.ecommerce.v1.entities.ListProduct;
+import com.app.ecommerce.v1.entities.Product;
 import com.app.ecommerce.v1.props.Messages;
 import com.app.ecommerce.v1.web.ResponseHttp;
 import com.app.ecommerce.v1.web.ServiceHttp;
@@ -22,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,11 +70,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         try {
             JSONArray jsonObject = response.getJSONArray("items");
             for(int i = 0; i< jsonObject.length(); i++) {
-                Log.i(TAG, "JSONObject Response:" + jsonObject.getString(0));
+                setProduct(jsonObject.getJSONObject(i).getString("title"), jsonObject.getJSONObject(i).getString("price"), jsonObject.getJSONObject(i).getString("image"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void setProduct(String title, String price, String url) {
+        Product product = new Product(title, price, url);
+        ListProduct.INSTANCE.setListProduct(product);
     }
 
     private void getError(VolleyError error) {
