@@ -1,2 +1,2 @@
-# eCommerce
-Desarrolla una aplicación de tipo eCommerce, nativa en Android que le permita al usuario realizar la búsqueda de productos de un catálogo.
+# E-commerce
+Native E-commerce application on Android that allows the user to search for products in a catalog
